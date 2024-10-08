@@ -11,8 +11,8 @@ install_cmake()
     echo "Installing CMake"
     DIR=$(mktemp -d)
     cd $DIR/
-    wget --no-check-certificate https://cmake.org/files/v3.21/cmake-$CMAKE_VERSION.tar.gz
-    tar xvf cmake-$CMAKE_VERSION.tar.gz
+    # wget --no-check-certificate https://cmake.org/files/v3.21/cmake-$CMAKE_VERSION.tar.gz
+    tar xvf $TOP_DIR/install/cmake-$CMAKE_VERSION.tar.gz
     cd $DIR/cmake-$CMAKE_VERSION
     ./bootstrap
     make
@@ -32,8 +32,8 @@ install_boost()
     DIR=$(mktemp -d)
     cd $DIR/
     boost_version=$(echo $BOOST_VERSION | tr '.' '_')
-    wget --no-check-certificate https://dl.bintray.com/boostorg/release/$BOOST_VERSION/source/boost_$boost_version.tar.gz
-    tar xvf boost_$boost_version.tar.gz
+    # wget --no-check-certificate https://dl.bintray.com/boostorg/release/$BOOST_VERSION/source/boost_$boost_version.tar.gz
+    tar xvf $TOP_DIR/install/boost_$boost_version.tar.gz
     cd $DIR/boost_$boost_version
     ./bootstrap.sh --with-libraries=date_time,regex,system,thread,random,filesystem,chrono,atomic --prefix=$PREFIX
     ./b2 install
@@ -43,14 +43,14 @@ install_boost()
 install_mdns(){
     ## You should use either Avahi or Apple mDNS - DO NOT use both
     echo "Installing mDNSResponder"
-    wget --no-check-certificate https://opensource.apple.com/tarballs/mDNSResponder/mDNSResponder-$MDNS_VERSION.tar.gz
-    tar xvf mDNSResponder-$MDNS_VERSION.tar.gz
+    # wget --no-check-certificate https://opensource.apple.com/tarballs/mDNSResponder/mDNSResponder-$MDNS_VERSION.tar.gz
+    tar xvf $TOP_DIR/install/mDNSResponder-$MDNS_VERSION.tar.gz
 
     # patch to make mdnsd work with unicast DNS
-    wget https://raw.githubusercontent.com/sony/nmos-cpp/master/Development/third_party/mDNSResponder/poll-rather-than-select.patch
-    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < poll-rather-than-select.patch
-    wget https://raw.githubusercontent.com/sony/nmos-cpp/master/Development/third_party/mDNSResponder/unicast.patch
-    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < unicast.patch
+    # wget https://raw.githubusercontent.com/sony/nmos-cpp/master/Development/third_party/mDNSResponder/poll-rather-than-select.patch
+    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < $TOP_DIR/install/poll-rather-than-select.patch
+    # wget https://raw.githubusercontent.com/sony/nmos-cpp/master/Development/third_party/mDNSResponder/unicast.patch
+    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < $TOP_DIR/install/unicast.patch
 
     cd ./mDNSResponder-$MDNS_VERSION/mDNSPosix
     set HAVE_IPV6=0
@@ -65,7 +65,8 @@ install_cpprest()
     echo "Installing C++ REST"
     DIR=$(mktemp -d)
     cd $DIR/
-    git clone --recurse-submodules --branch v$REST_VERSION https://github.com/Microsoft/cpprestsdk
+    # git clone --recurse-submodules --branch v$REST_VERSION https://github.com/Microsoft/cpprestsdk
+    tar zxvf $TOP_DIR/install/cpprestsdk-src.tar.gz
     mkdir cpprestsdk/Release/build
     cd cpprestsdk/Release/build
 
@@ -82,7 +83,8 @@ install_cpprest()
 install_cppnode()
 {
     echo "Installing Sony nmos-cpp"
-    git clone https://github.com/sony/nmos-cpp.git
+    # git clone https://github.com/sony/nmos-cpp.git
+    tar zxvf $TOP_DIR/install/nmos-cpp-src.tar.gz
     mkdir ./nmos-cpp/Development/build
     cd ./nmos-cpp/Development/build
 
@@ -102,7 +104,8 @@ install_cppnode_example()
     echo "Installing node example based on nmos-cpp lib"
     mkdir dev
     cd dev
-    git clone https://github.com:pkeroulas/nmos-cpp-examples
+    # git clone https://github.com/pkeroulas/nmos-cpp-examples
+    tar zxvf $TOP_DIR/install/nmos-cpp-examples-src.tar.gz
     mkdir ./nmos-cpp-examples/build
     cd ./nmos-cpp-examples/build
     cmake .. -DCMAKE_BUILD_TYPE:STRING="Release"

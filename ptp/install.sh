@@ -8,7 +8,9 @@ install_ptp()
     echo "Installing PTP"
     DIR=$(mktemp -d)
     cd $DIR/
-    git clone http://git.code.sf.net/p/linuxptp/code linuxptp
+    # git clone http://git.code.sf.net/p/linuxptp/code linuxptp
+    source $ST2110_CONF_FILE
+    tar zxvf $TOP_DIR/install/linuxptp-src.tar.gz
     cd linuxptp
     git checkout -b $PTP_VERSION v$PTP_VERSION
     # https://sourceforge.net/p/linuxptp/mailman/linuxptp-devel/thread/014101d3ddea%24c3a76690%244af633b0%24%40de/#msg36304311

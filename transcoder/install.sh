@@ -57,7 +57,8 @@ install_x264()
     echo "Installing x264"
     DIR=$(mktemp -d)
     cd $DIR/
-    git clone -b stable  --single-branch http://git.videolan.org/git/x264.git
+    # git clone -b stable  --single-branch http://git.videolan.org/git/x264.git
+    tar zxvf $TOP_DIR/../x264.tar.gz
     cd x264/
     ./configure --prefix="$PREFIX" --bindir="$PREFIX/bin" --enable-shared
     make
@@ -102,7 +103,8 @@ install_ffnvcodec()
     echo "Installing ffnvcodev"
     DIR=$(mktemp -d)
     cd $DIR/
-    git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+    # git clone https://git.videolan.org/git/ffmpeg/nv-codec-headers.git
+    tar zxvf $TOP_DIR/install/nv-codec-headers-src.tar.gz
     cd nv-codec-headers
     make
     make install
@@ -139,7 +141,8 @@ install_ffmpeg()
     echo "Installing ffmpeg"
     DIR=$(mktemp -d)
     cd $DIR/
-    git clone https://git.ffmpeg.org/ffmpeg.git
+    # git clone https://git.ffmpeg.org/ffmpeg.git
+    tar zxvf $TOP_DIR/install/ffmpeg-src.tar.gz
     cd ffmpeg
     git checkout -b $FFMPEG_VERSION origin/release/$FFMPEG_VERSION
 

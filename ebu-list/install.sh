@@ -22,23 +22,24 @@ install_list()
 
     # su $ST2110_USER -c "ebu_list_ctl install"
     cd /home/$ST2110_USER
-    git clone https://github.com/ebu/pi-list.git $LIST_PATH
-    cd $LIST_PATH
-    git submodule update --init --recursive
-    ./scripts/setup_build_env.sh
+    tar zxvf $TOP_DIR/install/pi-list-src.tar.gz
+    # git clone https://github.com/ebu/pi-list.git $LIST_PATH
+    # cd $LIST_PATH
+    # git submodule update --init --recursive
+    # ./scripts/setup_build_env.sh
 
     # dev mode means build application from source
-    if [ $LIST_DEV = "true" ]; then
-        ./scripts/deploy/deploy.sh
-    else
-        # whereas non dev mode means install from public docker image
-        cd $LIST_PATH/docs
-        docker-compose pull
+    # if [ $LIST_DEV = "true" ]; then
+    #     ./scripts/deploy/deploy.sh
+    # else
+    #     # whereas non dev mode means install from public docker image
+    #     cd $LIST_PATH/docs
+    #     docker-compose pull
 
-        # but still need to build node apps to run the capture probe
-        cd $LIST_PATH/
-        ./scripts/build_node.sh
-    fi
+    #     # but still need to build node apps to run the capture probe
+    #     cd $LIST_PATH/
+    #     ./scripts/build_node.sh
+    # fi
 
     chown -R $ST2110_USER:$ST2110_USER $LIST_PATH
 }
