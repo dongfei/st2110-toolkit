@@ -8,7 +8,7 @@ install_dpdk()
     DIR=$(mktemp -d)
     cd $DIR/
     # git clone https://github.com/pkeroulas/dpdk.git
-    tar zxvf $TOP_DIR/install/dpdk-src.tar.gz
+    tar zxvf $TOP_DIR/setup/dpdk-src.tar.gz
     cd dpdk
     git checkout -b clock_info origin/pdump_mlx5_hw_ts/clock_info/v1
 

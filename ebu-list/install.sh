@@ -22,7 +22,7 @@ install_list()
 
     # su $ST2110_USER -c "ebu_list_ctl install"
     cd /home/$ST2110_USER
-    tar zxvf $TOP_DIR/install/pi-list-src.tar.gz
+    tar zxvf $TOP_DIR/setup/pi-list-src.tar.gz
     # git clone https://github.com/ebu/pi-list.git $LIST_PATH
     # cd $LIST_PATH
     # git submodule update --init --recursive

@@ -12,7 +12,7 @@ install_cmake()
     DIR=$(mktemp -d)
     cd $DIR/
     # wget --no-check-certificate https://cmake.org/files/v3.21/cmake-$CMAKE_VERSION.tar.gz
-    tar xvf $TOP_DIR/install/cmake-$CMAKE_VERSION.tar.gz
+    tar xvf $TOP_DIR/setup/cmake-$CMAKE_VERSION.tar.gz
     cd $DIR/cmake-$CMAKE_VERSION
     ./bootstrap
     make
@@ -23,7 +23,7 @@ install_cmake()
 install_conan()
 {
     echo "Installing conan"
-    pip install conan==v1.45
+    pip install conan==v1.64
 }
 
 install_boost()
@@ -33,7 +33,7 @@ install_boost()
     cd $DIR/
     boost_version=$(echo $BOOST_VERSION | tr '.' '_')
     # wget --no-check-certificate https://dl.bintray.com/boostorg/release/$BOOST_VERSION/source/boost_$boost_version.tar.gz
-    tar xvf $TOP_DIR/install/boost_$boost_version.tar.gz
+    tar xvf $TOP_DIR/setup/boost_$boost_version.tar.gz
     cd $DIR/boost_$boost_version
     ./bootstrap.sh --with-libraries=date_time,regex,system,thread,random,filesystem,chrono,atomic --prefix=$PREFIX
     ./b2 install
@@ -44,13 +44,13 @@ install_mdns(){
     ## You should use either Avahi or Apple mDNS - DO NOT use both
     echo "Installing mDNSResponder"
     # wget --no-check-certificate https://opensource.apple.com/tarballs/mDNSResponder/mDNSResponder-$MDNS_VERSION.tar.gz
-    tar xvf $TOP_DIR/install/mDNSResponder-$MDNS_VERSION.tar.gz
+    tar xvf $TOP_DIR/setup/mDNSResponder-$MDNS_VERSION.tar.gz
 
     # patch to make mdnsd work with unicast DNS
     # wget https://raw.githubusercontent.com/sony/nmos-cpp/master/Development/third_party/mDNSResponder/poll-rather-than-select.patch
-    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < $TOP_DIR/install/poll-rather-than-select.patch
+    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < $TOP_DIR/setup/poll-rather-than-select.patch
     # wget https://raw.githubusercontent.com/sony/nmos-cpp/master/Development/third_party/mDNSResponder/unicast.patch
-    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < $TOP_DIR/install/unicast.patch
+    patch -d mDNSResponder-$MDNS_VERSION/ -p1 < $TOP_DIR/setup/unicast.patch
 
     cd ./mDNSResponder-$MDNS_VERSION/mDNSPosix
     set HAVE_IPV6=0
@@ -66,7 +66,7 @@ install_cpprest()
     DIR=$(mktemp -d)
     cd $DIR/
     # git clone --recurse-submodules --branch v$REST_VERSION https://github.com/Microsoft/cpprestsdk
-    tar zxvf $TOP_DIR/install/cpprestsdk-src.tar.gz
+    tar zxvf $TOP_DIR/setup/cpprestsdk-src.tar.gz
     mkdir cpprestsdk/Release/build
     cd cpprestsdk/Release/build
 
@@ -84,7 +84,7 @@ install_cppnode()
 {
     echo "Installing Sony nmos-cpp"
     # git clone https://github.com/sony/nmos-cpp.git
-    tar zxvf $TOP_DIR/install/nmos-cpp-src.tar.gz
+    tar zxvf $TOP_DIR/setup/nmos-cpp-src.tar.gz
     mkdir ./nmos-cpp/Development/build
     cd ./nmos-cpp/Development/build
 
@@ -105,17 +105,17 @@ install_cppnode_example()
     mkdir dev
     cd dev
     # git clone https://github.com/pkeroulas/nmos-cpp-examples
-    tar zxvf $TOP_DIR/install/nmos-cpp-examples-src.tar.gz
+    tar zxvf $TOP_DIR/setup/nmos-cpp-examples-src.tar.gz
     mkdir ./nmos-cpp-examples/build
     cd ./nmos-cpp-examples/build
     cmake .. -DCMAKE_BUILD_TYPE:STRING="Release"
     make
-    ln -s ~/dev/nmos-cpp-examples/build/my-nmos-node/my-nmos-node ~/my-nmos-node
-    cp ./nmos.json ~/my-nmos-node
+    ln -s $TOP_DIR/dev/nmos-cpp-examples/build/my-nmos-node/my-nmos-node $TOP_DIR/../my-nmos-node
+    cp $TOP_DIR/nmos/nmos.json $TOP_DIR/../nmos.json
 }
 
 install_nmos_init(){
-    install -m 755 ./nmos.init /etc/init.d/nmos
+    install -m 755 $TOP_DIR/nmos/nmos.init /etc/init.d/nmos
     update-rc.d nmos defaults
     systemctl enable nmos
     systemctl start nmos
